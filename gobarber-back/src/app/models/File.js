@@ -1,6 +1,5 @@
 const Sequelize = require('sequelize');
 const { Model } = require('sequelize');
-const bcrypt = require('bcryptjs');
 
 class File extends Model {
   static init(sequelize) {
@@ -11,7 +10,7 @@ class File extends Model {
         url: {
           type: Sequelize.VIRTUAL,
           get() {
-            return `http://localhost:3333/files/${this.path}`;
+            return `${process.env.APP_URL}/files/${this.path}`;
           },
         },
       },
@@ -21,10 +20,6 @@ class File extends Model {
     );
 
     return this;
-  }
-
-  checkPassword(password) {
-    return bcrypt.compare(password, this.password_hash);
   }
 }
 

@@ -8,11 +8,11 @@ const authConfig = require('../../config/auth');
 class SessionController {
   async store(req, res) {
     const schema = Yup.object().shape({
-      email: Yup.string().email.required(),
-      password: Yup.string().min(6).required(),
+      email: Yup.string().email().required(),
+      password: Yup.string().required(),
     });
 
-    if (!(await schema.isValid(res.body))) {
+    if (!(await schema.isValid(req.body))) {
       return res
         .status(HttpStatus.BAD_REQUEST)
         .json({ error: 'Validation fails' });
@@ -31,7 +31,7 @@ class SessionController {
     if (!(await user.checkPassword(password))) {
       return res
         .status(HttpStatus.UNAUTHORIZED)
-        .json({ error: 'Passord does not found' });
+        .json({ error: 'Password does not found' });
     }
 
     const { id, name } = user;
